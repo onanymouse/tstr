@@ -1,0 +1,157 @@
+# 🚀 QUICK START - 5 Minute Setup
+
+## Installation (Di VPS/Linux)
+
+```bash
+# Login ke VPS
+ssh root@your-vps-ip
+
+# Download files ke /opt
+mkdir -p /opt/security-scanner && cd /opt/security-scanner
+
+# Copy/Upload semua file di sini:
+# - security_scanner.py
+# - automated_scanner.sh
+# - requirements.txt
+# - config_targets_example.txt
+
+# Setup
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Test
+python3 security_scanner.py https://httpbin.org --timeout 5
+```
+
+## First Scan
+
+```bash
+# Activate venv
+source /opt/security-scanner/venv/bin/activate
+
+# Single target
+python3 security_scanner.py https://your-website.com
+
+# With reports
+python3 security_scanner.py https://your-website.com \
+    -o /tmp/report.json \
+    --html /tmp/report.html
+
+# View result
+cat /tmp/report.json | python3 -m json.tool
+```
+
+## Automated Daily Scanning
+
+```bash
+# Setup targets
+cp config_targets_example.txt config/targets.txt
+nano config/targets.txt  # Edit dengan target Anda
+
+# Run daily scan
+./automated_scanner.sh daily
+
+# Results di: reports/batch_YYYYMMDD_HHMMSS/
+
+# Schedule with cron (optional)
+crontab -e
+# Add: 0 2 * * * /opt/security-scanner/automated_scanner.sh daily
+```
+
+## View Results
+
+```bash
+# List reports
+ls -la reports/
+
+# View JSON
+python3 -c "
+import json
+with open('reports/report.json') as f:
+    data = json.load(f)
+    print(f\"Total: {data['summary']['total_vulnerabilities']}\")
+    print(f\"Critical: {data['summary']['critical']}\")
+    print(f\"High: {data['summary']['high']}\")
+"
+
+# Generate summary
+./automated_scanner.sh report
+```
+
+## Documentation Files
+
+Read in this order:
+
+1. **README_MASTER.md** ← Start here! Complete guide
+2. **INSTALL_VPS_LINUX.md** ← Detailed installation guide
+3. **PHP_NATIVE_TESTING.md** ← For PHP Native apps
+4. **config_targets_example.txt** ← Configure your targets
+
+## Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| ModuleNotFoundError | `pip install -r requirements.txt` |
+| Permission denied | `chmod +x *.sh *.py` |
+| Connection timeout | `--timeout 30` |
+| SSL error | `--no-ssl-verify` |
+| Out of disk | `find reports -mtime +30 -delete` |
+
+## Key Commands
+
+```bash
+# Single scan
+python3 security_scanner.py https://target.com
+
+# Batch scanning
+./automated_scanner.sh batch targets.txt
+
+# Daily automatic
+./automated_scanner.sh daily
+
+# Generate report
+./automated_scanner.sh report
+
+# Archive old data
+./automated_scanner.sh archive 30
+
+# Help
+./automated_scanner.sh help
+```
+
+## Important Notes
+
+⚠️ **LEGAL REMINDER:**
+- Only test websites you own or have written permission
+- Unauthorized access is ILLEGAL
+- Get written permission before scanning
+
+✅ **Best Practices:**
+- Keep target list in `config/targets.txt`
+- Schedule scans during off-peak hours
+- Archive reports regularly
+- Review results daily
+
+🔐 **Security:**
+- Keep .env files protected
+- Don't share API keys
+- Restrict access to scanner directory
+- Use strong credentials
+
+## Next Steps
+
+1. **Read README_MASTER.md** for complete documentation
+2. **Configure targets** in config/targets.txt
+3. **Run first scan** to verify installation
+4. **Setup automation** with cron jobs
+5. **Monitor reports** regularly
+
+---
+
+**Need Help?**
+- Check README_MASTER.md section: Troubleshooting
+- Read INSTALL_VPS_LINUX.md for detailed guide
+- Check PHP_NATIVE_TESTING.md for vulnerability details
+
+**All set!** 🎉 Happy testing!
