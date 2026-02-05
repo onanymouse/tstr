@@ -1,0 +1,19 @@
+# Security Scanner Targets Configuration
+# Format: One URL per line
+# Lines starting with # are comments
+
+# Example targets - Replace dengan target Anda
+# https://yourwebsite.com
+# https://api.yourwebsite.com
+# https://admin.yourwebsite.com
+
+# PHP Native Applications
+# https://app1.example.com
+# https://app2.example.com
+
+# Staging/Testing Environments (jika ada)
+# https://staging.example.com
+# https://test.example.com
+
+# Production Websites
+# https://production.example.com
